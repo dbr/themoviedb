@@ -6,6 +6,9 @@
 """An interface to the themoviedb.com API
 """
 
+__author__ = "dbr/Ben"
+__version__ = "0.1"
+
 config = {}
 config['apikey'] = "fake" #FIXME: get real API key
 config['debug'] = True
