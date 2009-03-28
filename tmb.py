@@ -27,18 +27,27 @@ if config['debug']:
     from stub_urllib import stub_urllib
     urllib = stub_urllib()
 
+class TmdBaseError(Exception): pass
+class TmdHttpError(TmdBaseError): pass
+class TmdXmlError(TmdBaseError): pass
+
 class XmlHandler:
     def __init__(self, url):
         self.url = url
 
     def _grabUrl(self, url):
-        return urllib.urlopen(
-            url
-        ).read()
+        try:
+            urlhandle = urllib.urlopen(url)
+        except IOError:
+            raise TmdHttpError(errormsg)
+        return urlhandle.read()
 
     def getEt(self):
         xml = self._grabUrl(self.url)
-        et = ElementTree.fromstring(xml)
+        try:
+            et = ElementTree.fromstring(xml)
+        except SyntaxError, errormsg:
+            raise TmdXmlError(errormsg)
         return et
 
 
