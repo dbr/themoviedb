@@ -30,22 +30,17 @@ if config['debug']:
 class XmlHandler:
     def __init__(self, url):
         self.url = url
+
     def _grabUrl(self, url):
         return urllib.urlopen(
             url
         ).read()
+
     def getEt(self):
         xml = self._grabUrl(self.url)
         et = ElementTree.fromstring(xml)
         return et
 
-class MovieAttribute(object):
-    pass
-
-class Movie(dict):
-    def __repr__(self):
-        return "<Movie: %s>" % self.get("title")
-        # return "<Movie: %s>" % (dict.__repr__(self))
 
 class SearchResults(list):
     def __init__(self):
@@ -53,7 +48,18 @@ class SearchResults(list):
     def __repr__(self):
         return "<Search results: %s>" % (list.__repr__(self))
 
-class Poster(dict):
+
+class Movie(dict):
+    def __repr__(self):
+        return "<Movie: %s>" % self.get("title")
+        # return "<Movie: %s>" % (dict.__repr__(self))
+
+
+class MovieAttribute(dict):
+    pass
+
+
+class Poster(MovieAttribute):
     """Stores poster image URLs, each size is under the approriate dict key.
     Common sizes are: cover, mid, original, thumb
     """
@@ -111,7 +117,7 @@ class MovieDb:
                 elif item.tag.lower() == "backdrop":
                     cur_backdrop.set(item)
                 else:
-                    cur_movie[item.tag] = item.text
+                    cur_movie[item.tag] = item.text
             cur_movie['poster'] = cur_poster
             cur_movie['backdrop'] = cur_backdrop
             search_results.append(cur_movie)
