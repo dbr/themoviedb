@@ -112,37 +112,51 @@ class Backdrop(Poster):
 class MovieDb:
     def __init__(self):
         pass
+
+    def _parseMovie(self, movie_element):
+        cur_movie = Movie()
+        cur_poster = Poster()
+        cur_backdrop = Backdrop()
+        for item in movie_element.getchildren():
+            if item.tag.lower() == "poster":
+                cur_poster.set(item)
+            elif item.tag.lower() == "backdrop":
+                cur_backdrop.set(item)
+            else:
+                cur_movie[item.tag] = item.text
+        cur_movie['poster'] = cur_poster
+        cur_movie['backdrop'] = cur_backdrop
+        return cur_movie
+
     def search(self, title):
         url = config['urls']['movie.search'] % (title)
         etree = XmlHandler(url).getEt()
         search_results = SearchResults()
-        for result in etree.find("moviematches").findall("movie"):
-            cur_movie = Movie()
-            cur_poster = Poster()
-            cur_backdrop = Backdrop()
-            for item in result.getchildren():
-                if item.tag.lower() == "poster":
-                    cur_poster.set(item)
-                elif item.tag.lower() == "backdrop":
-                    cur_backdrop.set(item)
-                else:
-                    cur_movie[item.tag] = item.text
-            cur_movie['poster'] = cur_poster
-            cur_movie['backdrop'] = cur_backdrop
+        for cur_result in etree.find("moviematches").findall("movie"):
+            cur_movie = self._parseMovie(cur_result)
             search_results.append(cur_movie)
         return search_results
 
+
 def search(name = None):
-    m = MovieDb()
-    return m.search(name)
+    """Searches for a film by its title.
+    Returns SearchResults (a list) containing all matches (Movie instances)
+    
+    Wraps MovieDb.search method, so you can do
+    >>> import tmd
+    >>> tmd.search("A title")
+    """
+    mdb = MovieDb()
+    return mdb.search(name)
 
 def main():
-    r = search("transformers")
-    film = r[0]
-    print film.keys()
-    print film['title']
-    print film['short_overview']
-    print film['backdrop'].largest()
+    results = search("transformers")
+    film = results[0]
+    print(film.keys())
+    print(film['id'])
+    print(film['title'])
+    print(film['short_overview'])
+    print(film['backdrop'].largest())
 
 if __name__ == '__main__':
     main()
