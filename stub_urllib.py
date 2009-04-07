@@ -1,3 +1,6 @@
+"""Stub themoviedb.org API, for use before API key was received
+"""
+
 template = {}
 template['search'] = """<results for="%(title)s">
 <Query searchTerms="%(title)s"/>
