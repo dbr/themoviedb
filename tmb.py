@@ -3,7 +3,7 @@
 #author:dbr/Ben
 #project:themoviedb
 
-"""An interface to the themoviedb.com API
+"""An interface to the themoviedb.org API
 """
 
 __author__ = "dbr/Ben"
