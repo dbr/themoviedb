@@ -10,7 +10,7 @@ __author__ = "dbr/Ben"
 __version__ = "0.1"
 
 config = {}
-config['apikey'] = "fake" #FIXME: get real API key
+config['apikey'] = "a8b9f96dde091408a03cb4c78477bd14"
 config['debug'] = True
 
 config['urls'] = {}
