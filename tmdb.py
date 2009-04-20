@@ -46,8 +46,6 @@ class XmlHandler:
 
 
 class SearchResults(list):
-    def __init__(self):
-        super(SearchResults, self).__init__()
     def __repr__(self):
         return "<Search results: %s>" % (list.__repr__(self))
 
