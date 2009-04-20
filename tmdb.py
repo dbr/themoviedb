@@ -11,7 +11,6 @@ __version__ = "0.1"
 
 config = {}
 config['apikey'] = "a8b9f96dde091408a03cb4c78477bd14"
-config['debug'] = True
 
 config['urls'] = {}
 config['urls']['movie.search'] = "http://api.themoviedb.org/2.0/Movie.search?title=%%s&api_key=%(apikey)s" % (config)
@@ -22,10 +21,6 @@ try:
     import xml.etree.cElementTree as ElementTree
 except ImportError:
     import xml.etree.ElementTree as ElementTree
-
-if config['debug']:
-    from stub_urllib import stub_urllib
-    urllib = stub_urllib()
 
 class TmdBaseError(Exception): pass
 class TmdHttpError(TmdBaseError): pass
