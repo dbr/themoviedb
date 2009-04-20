@@ -46,16 +46,23 @@ class XmlHandler:
 
 
 class SearchResults(list):
+    """Stores a list of Movie's that matched the search
+    """
     def __repr__(self):
         return "<Search results: %s>" % (list.__repr__(self))
 
 
 class Movie(dict):
+    """A dict containing the information about the film
+    """
     def __repr__(self):
         return "<Movie: %s>" % self.get("title")
 
 
 class MovieAttribute(dict):
+    """Base class for more complex attributes (like Poster,
+    which has multiple resolutions)
+    """
     pass
 
 
@@ -95,12 +102,16 @@ class Poster(MovieAttribute):
                 return self[cur_size]
 
 class Backdrop(Poster):
-    """Stores backdrop image URLs, each size under the approriate dict key.
+    """Stores backdrop image URLs, each size under the appropriate dict key.
     Common sizes are: mid, original, thumb
     """
     pass
 
 class MovieDb:
+    """Main interface to www.themoviedb.com
+    
+    The search() method searches for the film by title.
+    """
     def __init__(self):
         pass
 
@@ -120,6 +131,9 @@ class MovieDb:
         return cur_movie
 
     def search(self, title):
+        """Searches for a film by its title.
+        Returns SearchResults (a list) containing all matches (Movie instances)
+        """
         title = urllib.quote(title.encode("utf-8"))
         url = config['urls']['movie.search'] % (title)
         etree = XmlHandler(url).getEt()
@@ -131,12 +145,11 @@ class MovieDb:
 
 
 def search(name = None):
-    """Searches for a film by its title.
-    Returns SearchResults (a list) containing all matches (Movie instances)
-    
-    Wraps MovieDb.search method, so you can do
+    """Convenience wrapper for MovieDb.search - so you can do..
+
     >>> import tmdb
-    >>> tmdb.search("A title")
+    >>> tmdb.search("Fight Club")
+    <Search results: [<Movie: Fight Club>, <Movie: Fight Club [FRA]>]>
     """
     mdb = MovieDb()
     return mdb.search(name)
