@@ -112,9 +112,6 @@ class MovieDb:
     
     The search() method searches for the film by title.
     """
-    def __init__(self):
-        pass
-
     def _parseMovie(self, movie_element):
         cur_movie = Movie()
         cur_poster = Poster()
