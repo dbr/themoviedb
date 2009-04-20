@@ -53,7 +53,6 @@ class SearchResults(list):
 class Movie(dict):
     def __repr__(self):
         return "<Movie: %s>" % self.get("title")
-        # return "<Movie: %s>" % (dict.__repr__(self))
 
 
 class MovieAttribute(dict):
