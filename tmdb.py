@@ -63,7 +63,7 @@ class MovieAttribute(dict):
 
 
 class Poster(MovieAttribute):
-    """Stores poster image URLs, each size is under the approriate dict key.
+    """Stores poster image URLs, each size is under the appropriate dict key.
     Common sizes are: cover, mid, original, thumb
     """
     def __repr__(self):
