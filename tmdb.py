@@ -135,8 +135,8 @@ def search(name = None):
     Returns SearchResults (a list) containing all matches (Movie instances)
     
     Wraps MovieDb.search method, so you can do
-    >>> import tmd
-    >>> tmd.search("A title")
+    >>> import tmdb
+    >>> tmdb.search("A title")
     """
     mdb = MovieDb()
     return mdb.search(name)
