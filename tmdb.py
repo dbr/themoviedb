@@ -17,10 +17,7 @@ config['urls']['movie.search'] = "http://api.themoviedb.org/2.0/Movie.search?tit
 
 import urllib
 
-try:
-    import xml.etree.cElementTree as ElementTree
-except ImportError:
-    import xml.etree.ElementTree as ElementTree
+import xml.etree.cElementTree as ElementTree
 
 class TmdBaseError(Exception): pass
 class TmdHttpError(TmdBaseError): pass
