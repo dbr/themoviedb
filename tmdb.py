@@ -24,6 +24,8 @@ class TmdHttpError(TmdBaseError): pass
 class TmdXmlError(TmdBaseError): pass
 
 class XmlHandler:
+    """Deals with retrieval of XML files from API
+    """
     def __init__(self, url):
         self.url = url
 
