@@ -123,6 +123,7 @@ class MovieDb:
         return cur_movie
 
     def search(self, title):
+        title = urllib.quote(title.encode("utf-8"))
         url = config['urls']['movie.search'] % (title)
         etree = XmlHandler(url).getEt()
         search_results = SearchResults()
