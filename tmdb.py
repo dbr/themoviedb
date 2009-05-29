@@ -32,7 +32,7 @@ class XmlHandler:
     def _grabUrl(self, url):
         try:
             urlhandle = urllib.urlopen(url)
-        except IOError:
+        except IOError, errormsg:
             raise TmdHttpError(errormsg)
         return urlhandle.read()
 
