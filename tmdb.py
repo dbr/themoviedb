@@ -146,7 +146,7 @@ def search(name = None):
 
     >>> import tmdb
     >>> tmdb.search("Fight Club")
-    <Search results: [<Movie: Fight Club>, <Movie: Fight Club [FRA]>]>
+    <Search results: [<Movie: Fight Club>]>
     """
     mdb = MovieDb()
     return mdb.search(name)
