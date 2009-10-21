@@ -161,35 +161,38 @@ class Images(recursivedefaultdict):
             	if cur_size in size:
                 	return self[_type][_id][cur_size]
 
-class Cast(recursivedefaultdict):
-    """Stores cast information
+class CrewRoleList(dict):
+    """Stores a list of roles, such as director, actor etc
+    
+    >>> import tmdb
+    >>> tmdb.getMovieInfo(550)['cast'].keys()[:5]
+    ['casting', 'producer', 'author', 'sound editor', 'actor']
     """
-    def set(self, person_et):
-        """Takes an elementtree Element ('person') and stores the information as a Person,
-        using the job and id as the dict key.
-        
-        For example:
-       <person url="http://www.themoviedb.org/person/2293" name="Frank Miller" job="Director" character="" id="2293"/>
-        
-        ..becomes:
-        people['Director']['2293'] = Person
-        people['Director']['2293']['name'] = 'Frank Miller'
-        """
-        job = person_et.get("job")
-        _id = person_et.get("id")
-        name = person_et.get("name")
-        character = person_et.get("character")
-        url = person_et.get("url")
-        self[job][_id] = Person(job, _id, name, character, url)
+    pass
+
+class CrewList(list):
+    """Stores list of crew in specific role
+    
+    >>> import tmdb
+    >>> tmdb.
+    """
+    pass
 
 class Person(dict):
-    """Stores information about a specific person"""
+    """Stores information about a specific member of cast
+    """
     def __init__(self, job, _id, name, character, url):
         self['job'] = job
         self['id'] = _id
         self['name'] = name
         self['character'] = character
         self['url'] = url
+    
+    def __repr__(self):
+        if self['character'] is None or self['character'] == "":
+            return "<%(job)s (id %(id)s): %(name)s>" % self
+        else:
+            return "<%(job)s (id %(id)s): %(name)s (as %(character)s)>" % self
 
 class MovieDb:
     """Main interface to www.themoviedb.com
@@ -215,7 +218,7 @@ class MovieDb:
         cur_studios = Studios()
         cur_countries = Countries()
         cur_images = Images()
-        cur_cast = Cast()
+        cur_cast = CrewRoleList()
         for item in movie_element.getchildren():
             if item.tag.lower() == "categories":
                 for subitem in item.getchildren():
@@ -231,7 +234,15 @@ class MovieDb:
                     cur_images.set(subitem)
             elif item.tag.lower() == "cast":
                 for subitem in item.getchildren():
-                    cur_cast.set(subitem)
+                    job = subitem.get("job").lower()
+                    p = Person(
+                        job = job,
+                        _id = subitem.get("id"),
+                        name = subitem.get("name"),
+                        character = subitem.get("character"),
+                        url = subitem.get("url")
+                    )
+                    cur_cast.setdefault(job, CrewList()).append(p)
             else:
                 cur_movie[item.tag] = item.text
 
@@ -289,7 +300,10 @@ def main():
     searchResult = results[0]
     movie = getMovieInfo(searchResult['id'])
     print movie['name']
-    print movie['cast']['Producer']['7474']['name']
+    
+    print "Producers:"
+    for prodr in movie['cast']['Producer']:
+        print " " * 4, prodr['name']
     print movie['images']
     for genreName in movie['categories']['genre']:
         print "%s (%s)" % (genreName, movie['categories']['genre'][genreName])
