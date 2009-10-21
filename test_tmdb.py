@@ -68,6 +68,15 @@ class test_wrappers(unittest.TestCase):
             tmdb.SearchResults
         )
 
+    def test_getmovieinfo_wrapper(self):
+        """Tests tmdb.getMovieInfo() wrapper works correctly
+        """
+        r = tmdb.getMovieInfo(550)
+        self.assertEquals(
+            type(r),
+            tmdb.Movie
+        )
+
 class test_artwork(unittest.TestCase):
     def setUp(self):
         filmId = tmdb.MovieDb().search("Fight Club")[0]['id']
