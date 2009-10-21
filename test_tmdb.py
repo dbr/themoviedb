@@ -47,6 +47,17 @@ class test_search(unittest.TestCase):
             'tt0137523'
         )
 
+class test_getmovieinfo(unittest.TestCase):
+    def test_search_to_info(self):
+        """Gets a movie ID via search, then calls getMovieInfo using this
+        """
+        sr = tmdb.search("fight club")[0]
+        movie = tmdb.getMovieInfo(sr['id'])
+        self.assertEquals(
+            sr['name'],
+            movie['name']
+        )
+
 class test_wrappers(unittest.TestCase):
     def test_search_wrapper(self):
         """Tests tmdb.search() wrapper works correctly
