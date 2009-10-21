@@ -174,7 +174,8 @@ class CrewList(list):
     """Stores list of crew in specific role
     
     >>> import tmdb
-    >>> tmdb.
+    >>> tmdb.getMovieInfo(550)['cast']['author']
+    [<author (id 7468): Chuck Palahniuk>, <author (id 7469): Jim Uhls>]
     """
     pass
 
