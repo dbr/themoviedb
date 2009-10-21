@@ -57,6 +57,18 @@ class test_getmovieinfo(unittest.TestCase):
             sr['name'],
             movie['name']
         )
+    
+    def test_get_director(self):
+        """Checks you can get the director of a film
+        """
+        mid = tmdb.search("Inglourious Basterds")[0]['id']
+        movie = tmdb.getMovieInfo(mid)
+
+        self.assertTrue(len(movie['cast']['director']) == 1)
+        self.assertEquals(
+            movie['cast']['director'][0]['name'],
+            "Quentin Tarantino"
+        )
 
 class test_wrappers(unittest.TestCase):
     def test_search_wrapper(self):
