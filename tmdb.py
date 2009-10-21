@@ -280,7 +280,7 @@ def search(name = None):
 
     >>> import tmdb
     >>> tmdb.search("Fight Club")
-    <Search results: [<MovieResult: Fight Club>]>
+    <Search results: [<MovieResult: Fight Club (1999-09-16)>]>
     """
     mdb = MovieDb()
     return mdb.search(name)
@@ -290,7 +290,7 @@ def getMovieInfo(id = None):
 
     >>> import tmdb
     >>> tmdb.getMovieInfo(187)
-    <Search results: [<Movie: Fight Club>]>
+    <MovieResult: Sin City (2005-04-01)>
     """
     mdb = MovieDb()
     return mdb.getMovieInfo(id)
