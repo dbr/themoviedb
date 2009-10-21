@@ -144,6 +144,13 @@ class Images(recursivedefaultdict):
         url = image_et.get("url")
         self[_type][_id][size] = url
 
+    def __repr__(self):
+        return "<%s with %s posters and %s backdrops>" % (
+            self.__class__.__name__, 
+            len(self['poster'].keys()), 
+            len(self['backdrop'].keys())
+        )
+
     def largest(self, _type, _id):
         """Attempts to return largest image of a specific type and id
         """
@@ -192,9 +199,14 @@ class MovieDb:
     """
     def _parseSearchResults(self, movie_element):
         cur_movie = MovieResult()
+        cur_images = Images()
         for item in movie_element.getchildren():
-            if item.tag.lower() == "name" or item.tag.lower() == "id" or item.tag.lower() == "released":
-                cur_movie[item.tag] = item.text
+                if item.tag.lower() == "images":
+                    for subitem in item.getchildren():
+                        cur_images.set(subitem)
+                else:
+                    cur_movie[item.tag] = item.text
+        cur_movie['images'] = cur_images
         return cur_movie
 
     def _parseMovie(self, movie_element):
@@ -273,13 +285,14 @@ def getMovieInfo(id = None):
     return mdb.getMovieInfo(id)
 
 def main():
-    results = search("Sin City")
+    results = search("Fight Club")
     searchResult = results[0]
     movie = getMovieInfo(searchResult['id'])
     print movie['name']
-    print movie['cast']['Producer']['5911']['name']
+    print movie['cast']['Producer']['7474']['name']
+    print movie['images']
     for genreName in movie['categories']['genre']:
-        print "%s (%s)" % (genre, movie['categories']['genre'][genreName])
+        print "%s (%s)" % (genreName, movie['categories']['genre'][genreName])
     
 
 if __name__ == '__main__':

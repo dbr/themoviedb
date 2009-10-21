@@ -29,21 +29,21 @@ class test_search(unittest.TestCase):
 
         self.assertEquals(
             type(first_result),
-            tmdb.Movie
+            tmdb.MovieResult
         )
 
         self.assertEquals(
-            first_result['title'],
+            first_result['name'],
             'Fight Club'
         )
 
         self.assertEquals(
-            first_result['release'],
+            first_result['released'],
             '1999-09-16'
         )
 
         self.assertEquals(
-            first_result['imdb'],
+            first_result['imdb_id'],
             'tt0137523'
         )
 
@@ -59,30 +59,35 @@ class test_wrappers(unittest.TestCase):
 
 class test_artwork(unittest.TestCase):
     def setUp(self):
-        self.film = tmdb.MovieDb().search("Fight Club")[0]
+        filmId = tmdb.MovieDb().search("Fight Club")[0]['id']
+        self.film = tmdb.MovieDb().getMovieInfo(filmId)
 
     def test_poster_urls(self):
         """Checks posters are valid looking URLs
         """
-        for size, url in self.film['poster'].items():
-            self.assertTrue(
-                url.startswith("http://")
-            )
+        for _id in self.film['images']['poster']:
+            for size in self.film['images']['poster'][_id]:
+                url = self.film['images']['poster'][_id][size]
+                self.assertTrue(
+                    url.startswith("http://")
+                )
 
     def test_backdrop_urls(self):
         """Checks backdrop images are valid looking URLs
         """
-        for size, url in self.film['backdrop'].items():
-            self.assertTrue(
-                url.startswith("http://")
-            )
+        for _id in self.film['images']['backdrop']:
+            for size in self.film['images']['backdrop'][_id]:
+                url = self.film['images']['backdrop'][_id][size]
+                self.assertTrue(
+                    url.startswith("http://")
+                )
 
     def test_artwork_repr(self):
         """Checks artwork repr looks sensible
         """
         self.assertTrue(
-            repr(self.film['poster']).startswith(
-                "<Poster with sizes "
+            repr(self.film['images']).startswith(
+                "<Images with "
             )
         )
 
