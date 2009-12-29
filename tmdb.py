@@ -303,7 +303,7 @@ def main():
     print movie['name']
     
     print "Producers:"
-    for prodr in movie['cast']['Producer']:
+    for prodr in movie['cast']['producer']:
         print " " * 4, prodr['name']
     print movie['images']
     for genreName in movie['categories']['genre']:
