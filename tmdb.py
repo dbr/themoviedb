@@ -22,8 +22,6 @@ import urllib
 
 import xml.etree.cElementTree as ElementTree
 
-from collections import defaultdict 
-
 class TmdBaseError(Exception): pass
 class TmdHttpError(TmdBaseError): pass
 class TmdXmlError(TmdBaseError): pass
@@ -49,10 +47,6 @@ class XmlHandler:
             raise TmdXmlError(errormsg)
         return et
 
-class recursivedefaultdict(defaultdict): 
-    def __init__(self): 
-        self.default_factory = type(self)
-
 class SearchResults(list):
     """Stores a list of Movie's that matched the search
     """
@@ -72,7 +66,7 @@ class Movie(dict):
     def __repr__(self):
         return "<MovieResult: %s (%s)>" % (self.get("name"), self.get("released"))
 
-class Categories(recursivedefaultdict):
+class Categories(dict):
     """Stores category information
     """
     def set(self, category_et):
@@ -88,9 +82,10 @@ class Categories(recursivedefaultdict):
         _type = category_et.get("type")
         name = category_et.get("name")
         url = category_et.get("url")
+        self.setdefault(_type, {})[name] = url
         self[_type][name] = url
 
-class Studios(recursivedefaultdict):
+class Studios(dict):
     """Stores category information
     """
     def set(self, studio_et):
@@ -107,7 +102,7 @@ class Studios(recursivedefaultdict):
         url = studio_et.get("url")
         self[name] = url
 
-class Countries(recursivedefaultdict):
+class Countries(dict):
     """Stores country information
     """
     def set(self, country_et):
@@ -123,7 +118,7 @@ class Countries(recursivedefaultdict):
         code = country_et.get("code")
         name = country_et.get("name")
         url = country_et.get("url")
-        self[code][name] = url
+        self.setdefault(code, {})['name'] = url
 
 class Images(recursivedefaultdict):
     """Stores image information
