@@ -97,32 +97,51 @@ class test_artwork(unittest.TestCase):
     def test_poster_urls(self):
         """Checks posters are valid looking URLs
         """
-        for _id in self.film['images']['poster']:
-            for size in self.film['images']['poster'][_id]:
-                url = self.film['images']['poster'][_id][size]
-                self.assertTrue(
-                    url.startswith("http://")
-                )
+        for poster in self.film['images'].posters:
+            for key, value in poster.items():
+                if key not in ['id', 'type']:
+                    self.assertTrue(
+                        value.startswith("http://")
+                    )
 
     def test_backdrop_urls(self):
         """Checks backdrop images are valid looking URLs
         """
-        for _id in self.film['images']['backdrop']:
-            for size in self.film['images']['backdrop'][_id]:
-                url = self.film['images']['backdrop'][_id][size]
-                self.assertTrue(
-                    url.startswith("http://")
-                )
+        for poster in self.film['images'].posters:
+            for key, value in poster.items():
+                if key not in ['id', 'type']:
+                    self.assertTrue(
+                        value.startswith("http://")
+                    )
 
     def test_artwork_repr(self):
         """Checks artwork repr looks sensible
         """
         self.assertTrue(
-            repr(self.film['images']).startswith(
-                "<Images with "
+            repr(self.film['images'].posters[0]).startswith(
+                "<Image (poster for ID"
+            )
+        )
+        self.assertTrue(
+            repr(self.film['images'].backdrops[0]).startswith(
+                "<Image (backdrop for ID"
             )
         )
 
+    def test_posters(self):
+        """Check retrieving largest artwork
+        """
+        self.assertTrue(
+            len(self.film['images'].posters) > 1
+        )
+        self.assertTrue(
+            len(self.film['images'].backdrops) > 1
+        )
+        
+        self.assertEquals(
+            self.film['images'].posters[0]['original'],
+            'http://images.themoviedb.org/posters/4861/Fight_Club.jpg'
+        )
 
 if __name__ == '__main__':
     unittest.main()

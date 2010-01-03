@@ -120,41 +120,62 @@ class Countries(dict):
         url = country_et.get("url")
         self.setdefault(code, {})['name'] = url
 
-class Images(recursivedefaultdict):
-    """Stores image information
+class Image(dict):
+    """Stores image information for a single poster/backdrop (includes
+    multiple sizes)
+    """
+    def __init__(self, _id, _type, size, url):
+        self['id'] = _id
+        self['type'] = _type
+
+    def __repr__(self):
+        return "<Image (%s for ID %s)>" % (self['type'], self['id'])
+
+class ImagesList(list):
+    """Stores a list of Images, and functions to filter "only posters" etc
     """
     def set(self, image_et):
         """Takes an elementtree Element ('image') and stores the url,
-        using the type, id and size as the dict key.
+        along with the type, id and size.
+        
+        Is a list containing each image as a dictionary (which includes the
+        various sizes)
         
         For example:
-       <image type="poster" size="original" url="http://images.themoviedb.org/posters/4181/67926_sin-city-02-color_122_207lo.jpg" id="4181"/> 
+        <image type="poster" size="original" url="http://images.themoviedb.org/posters/4181/67926_sin-city-02-color_122_207lo.jpg" id="4181"/> 
         
         ..becomes:
-        images['poster']['4181']['original'] = 'http://images.themoviedb.org/posters/4181/67926_sin-city-02-color_122_207lo.jpg'
+        images[0] = {'id':4181', 'type': 'poster', 'original': 'http://images.themov...'}
         """
         _type = image_et.get("type")
         _id = image_et.get("id")
         size = image_et.get("size")
         url = image_et.get("url")
-        self[_type][_id][size] = url
+        
+        cur = self.find_by('id', _id)
+        if len(cur) == 0:
+            self.append(
+                Image(_id = _id, _type = _type, size = size, url = url)
+            )
+        elif len(cur) == 1:
+            cur[0][size] = url
+        else:
+            raise ValueError("Found more than one poster with id %s, this should never happen" % (_id))
 
-    def __repr__(self):
-        return "<%s with %s posters and %s backdrops>" % (
-            self.__class__.__name__, 
-            len(self['poster'].keys()), 
-            len(self['backdrop'].keys())
-        )
+    def find_by(self, key, value):
+        ret = []
+        for cur in self:
+            if cur[key] == value:
+                ret.append(cur)
+        return ret
 
-    def largest(self, _type, _id):
-        """Attempts to return largest image of a specific type and id
-        """
-        if(isinstance(_id, int)):
-            _id = str(_id)
-        for cur_size in ["original", "mid", "cover", "thumb"]:
-            for size in self[_type][_id]:
-            	if cur_size in size:
-                	return self[_type][_id][cur_size]
+    @property
+    def posters(self):
+        return self.find_by('type', 'poster')
+
+    @property
+    def backdrops(self):
+        return self.find_by('type', 'backdrop')
 
 class CrewRoleList(dict):
     """Stores a list of roles, such as director, actor etc
@@ -198,7 +219,7 @@ class MovieDb:
     """
     def _parseSearchResults(self, movie_element):
         cur_movie = MovieResult()
-        cur_images = Images()
+        cur_images = ImagesList()
         for item in movie_element.getchildren():
                 if item.tag.lower() == "images":
                     for subitem in item.getchildren():
@@ -213,7 +234,7 @@ class MovieDb:
         cur_categories = Categories()
         cur_studios = Studios()
         cur_countries = Countries()
-        cur_images = Images()
+        cur_images = ImagesList()
         cur_cast = CrewRoleList()
         for item in movie_element.getchildren():
             if item.tag.lower() == "categories":
