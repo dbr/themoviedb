@@ -118,7 +118,7 @@ class Countries(dict):
         code = country_et.get("code")
         name = country_et.get("name")
         url = country_et.get("url")
-        self.setdefault(code, {})['name'] = url
+        self.setdefault(code, {})[name] = url
 
 class Image(dict):
     """Stores image information for a single poster/backdrop (includes
