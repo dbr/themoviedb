@@ -322,8 +322,12 @@ class MovieDb:
         """
         url = config['urls']['movie.getInfo'] % (id)
         etree = XmlHandler(url).getEt()
-        return self._parseMovie(etree.find("movies").findall("movie")[0])
+        moviesTree = etree.find("movies").findall("movie")
 
+        if len(moviesTree) == 0:
+            raise TmdNoResults("No results for id %s" % id)
+
+        return self._parseMovie(moviesTree[0])
 
         return self._parseMovie(moviesTree[0])
 
