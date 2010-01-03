@@ -325,7 +325,10 @@ class MovieDb:
         return self._parseMovie(etree.find("movies").findall("movie")[0])
 
 
-def search(name = None):
+        return self._parseMovie(moviesTree[0])
+
+
+def search(name):
     """Convenience wrapper for MovieDb.search - so you can do..
 
     >>> import tmdb
@@ -336,7 +339,7 @@ def search(name = None):
     return mdb.search(name)
 
 
-def getMovieInfo(id = None):
+def getMovieInfo(id):
     """Convenience wrapper for MovieDb.search - so you can do..
 
     >>> import tmdb
