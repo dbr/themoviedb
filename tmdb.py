@@ -317,7 +317,7 @@ class MovieDb:
         return search_results
 
     def getMovieInfo(self, id):
-        """Returns movie info by from its tmdb id.
+        """Returns movie info by it's TheMovieDb ID.
         Returns a Movie instance
         """
         url = config['urls']['movie.getInfo'] % (id)
