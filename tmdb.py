@@ -1,8 +1,8 @@
 #!/usr/bin/env python2.5
 #encoding:utf-8
 #author:dbr/Ben
+#contributors: by ccjensen/Chris
 #project:themoviedb
-#forked by ccjensen/Chris
 #http://github.com/ccjensen/themoviedb
 
 """An interface to the themoviedb.org API
