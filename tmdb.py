@@ -154,6 +154,11 @@ class Image(dict):
         self['id'] = _id
         self['type'] = _type
 
+    def largest(self):
+        for csize in ["original", "mid", "cover", "thumb"]:
+            if csize in self:
+                return csize
+
     def __repr__(self):
         return "<Image (%s for ID %s)>" % (self['type'], self['id'])
 
