@@ -27,6 +27,9 @@ class TmdBaseError(Exception):
     pass
 
 
+class TmdNoResults(TmdBaseError):
+    pass
+
 class TmdHttpError(TmdBaseError):
     pass
 
