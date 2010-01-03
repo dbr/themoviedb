@@ -143,5 +143,17 @@ class test_artwork(unittest.TestCase):
             'http://images.themoviedb.org/posters/4861/Fight_Club.jpg'
         )
 
+
+class test_hashing(unittest.TestCase):
+    def setUp(self):
+        self.m = tmdb.MovieDb()
+
+    def test_gethashinfo(self):
+        """Tests searching by file hash
+        """
+        film = self.m.hashGetInfo('00277ff46533b155')
+        self.assertEquals(film['name'], 'Willow')
+
+
 if __name__ == '__main__':
     unittest.main()
