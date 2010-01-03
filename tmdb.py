@@ -22,13 +22,23 @@ import urllib
 
 import xml.etree.cElementTree as ElementTree
 
-class TmdBaseError(Exception): pass
-class TmdHttpError(TmdBaseError): pass
-class TmdXmlError(TmdBaseError): pass
+
+class TmdBaseError(Exception):
+    pass
+
+
+class TmdHttpError(TmdBaseError):
+    pass
+
+
+class TmdXmlError(TmdBaseError):
+    pass
+
 
 class XmlHandler:
     """Deals with retrieval of XML files from API
     """
+
     def __init__(self, url):
         self.url = url
 
@@ -47,15 +57,19 @@ class XmlHandler:
             raise TmdXmlError(errormsg)
         return et
 
+
 class SearchResults(list):
     """Stores a list of Movie's that matched the search
     """
+
     def __repr__(self):
         return "<Search results: %s>" % (list.__repr__(self))
+
 
 class MovieResult(dict):
     """A dict containing the information about a specific search result
     """
+
     def __repr__(self):
         return "<MovieResult: %s (%s)>" % (self.get("name"), self.get("released"))
 
@@ -63,19 +77,22 @@ class MovieResult(dict):
 class Movie(dict):
     """A dict containing the information about the film
     """
+
     def __repr__(self):
         return "<MovieResult: %s (%s)>" % (self.get("name"), self.get("released"))
+
 
 class Categories(dict):
     """Stores category information
     """
+
     def set(self, category_et):
         """Takes an elementtree Element ('category') and stores the url,
         using the type and name as the dict key.
-        
+
         For example:
-       <category type="genre" url="http://themoviedb.org/encyclopedia/category/80" name="Crime"/> 
-        
+       <category type="genre" url="http://themoviedb.org/encyclopedia/category/80" name="Crime"/>
+
         ..becomes:
         categories['genre']['Crime'] = 'http://themoviedb.org/encyclopedia/category/80'
         """
@@ -85,16 +102,18 @@ class Categories(dict):
         self.setdefault(_type, {})[name] = url
         self[_type][name] = url
 
+
 class Studios(dict):
     """Stores category information
     """
+
     def set(self, studio_et):
         """Takes an elementtree Element ('studio') and stores the url,
         using the name as the dict key.
-        
+
         For example:
-       <studio url="http://www.themoviedb.org/encyclopedia/company/20" name="Miramax Films"/> 
-        
+       <studio url="http://www.themoviedb.org/encyclopedia/company/20" name="Miramax Films"/>
+
         ..becomes:
         studios['name'] = 'http://www.themoviedb.org/encyclopedia/company/20'
         """
@@ -102,16 +121,18 @@ class Studios(dict):
         url = studio_et.get("url")
         self[name] = url
 
+
 class Countries(dict):
     """Stores country information
     """
+
     def set(self, country_et):
         """Takes an elementtree Element ('country') and stores the url,
         using the name and code as the dict key.
-        
+
         For example:
-       <country url="http://www.themoviedb.org/encyclopedia/country/223" name="United States of America" code="US"/> 
-        
+       <country url="http://www.themoviedb.org/encyclopedia/country/223" name="United States of America" code="US"/>
+
         ..becomes:
         countries['code']['name'] = 'http://www.themoviedb.org/encyclopedia/country/223'
         """
@@ -120,10 +141,12 @@ class Countries(dict):
         url = country_et.get("url")
         self.setdefault(code, {})[name] = url
 
+
 class Image(dict):
     """Stores image information for a single poster/backdrop (includes
     multiple sizes)
     """
+
     def __init__(self, _id, _type, size, url):
         self['id'] = _id
         self['type'] = _type
@@ -131,19 +154,21 @@ class Image(dict):
     def __repr__(self):
         return "<Image (%s for ID %s)>" % (self['type'], self['id'])
 
+
 class ImagesList(list):
     """Stores a list of Images, and functions to filter "only posters" etc
     """
+
     def set(self, image_et):
         """Takes an elementtree Element ('image') and stores the url,
         along with the type, id and size.
-        
+
         Is a list containing each image as a dictionary (which includes the
         various sizes)
-        
+
         For example:
-        <image type="poster" size="original" url="http://images.themoviedb.org/posters/4181/67926_sin-city-02-color_122_207lo.jpg" id="4181"/> 
-        
+        <image type="poster" size="original" url="http://images.themoviedb.org/posters/4181/67926_sin-city-02-color_122_207lo.jpg" id="4181"/>
+
         ..becomes:
         images[0] = {'id':4181', 'type': 'poster', 'original': 'http://images.themov...'}
         """
@@ -151,12 +176,11 @@ class ImagesList(list):
         _id = image_et.get("id")
         size = image_et.get("size")
         url = image_et.get("url")
-        
+
         cur = self.find_by('id', _id)
         if len(cur) == 0:
-            self.append(
-                Image(_id = _id, _type = _type, size = size, url = url)
-            )
+            nimg = Image(_id = _id, _type = _type, size = size, url = url)
+            self.append(nimg)
         elif len(cur) == 1:
             cur[0][size] = url
         else:
@@ -177,39 +201,44 @@ class ImagesList(list):
     def backdrops(self):
         return self.find_by('type', 'backdrop')
 
+
 class CrewRoleList(dict):
     """Stores a list of roles, such as director, actor etc
-    
+
     >>> import tmdb
     >>> tmdb.getMovieInfo(550)['cast'].keys()[:5]
     ['casting', 'producer', 'author', 'sound editor', 'actor']
     """
     pass
 
+
 class CrewList(list):
     """Stores list of crew in specific role
-    
+
     >>> import tmdb
     >>> tmdb.getMovieInfo(550)['cast']['author']
     [<author (id 7468): Chuck Palahniuk>, <author (id 7469): Jim Uhls>]
     """
     pass
 
+
 class Person(dict):
     """Stores information about a specific member of cast
     """
+
     def __init__(self, job, _id, name, character, url):
         self['job'] = job
         self['id'] = _id
         self['name'] = name
         self['character'] = character
         self['url'] = url
-    
+
     def __repr__(self):
         if self['character'] is None or self['character'] == "":
             return "<%(job)s (id %(id)s): %(name)s>" % self
         else:
             return "<%(job)s (id %(id)s): %(name)s (as %(character)s)>" % self
+
 
 class MovieDb:
     """Main interface to www.themoviedb.com
@@ -217,6 +246,7 @@ class MovieDb:
     The search() method searches for the film by title.
     The getMovieInfo() method retrieves information about a specific movie using themoviedb id.
     """
+
     def _parseSearchResults(self, movie_element):
         cur_movie = MovieResult()
         cur_images = ImagesList()
@@ -257,7 +287,7 @@ class MovieDb:
                         _id = subitem.get("id"),
                         name = subitem.get("name"),
                         character = subitem.get("character"),
-                        url = subitem.get("url")
+                        url = subitem.get("url"),
                     )
                     cur_cast.setdefault(job, CrewList()).append(p)
             else:
@@ -302,6 +332,7 @@ def search(name = None):
     mdb = MovieDb()
     return mdb.search(name)
 
+
 def getMovieInfo(id = None):
     """Convenience wrapper for MovieDb.search - so you can do..
 
@@ -312,19 +343,20 @@ def getMovieInfo(id = None):
     mdb = MovieDb()
     return mdb.getMovieInfo(id)
 
+
 def main():
     results = search("Fight Club")
     searchResult = results[0]
     movie = getMovieInfo(searchResult['id'])
     print movie['name']
-    
+
     print "Producers:"
     for prodr in movie['cast']['producer']:
         print " " * 4, prodr['name']
     print movie['images']
     for genreName in movie['categories']['genre']:
         print "%s (%s)" % (genreName, movie['categories']['genre'][genreName])
-    
+
 
 if __name__ == '__main__':
     main()
