@@ -3,7 +3,7 @@
 #author:dbr/Ben
 #contributors: by ccjensen/Chris
 #project:themoviedb
-#http://github.com/ccjensen/themoviedb
+#http://github.com/dbr/themoviedb
 
 """An interface to the themoviedb.org API
 """
