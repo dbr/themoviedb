@@ -386,7 +386,7 @@ class MovieDb:
         """Returns movie info by it's OpenSubtitle-format hash.
         http://trac.opensubtitles.org/projects/opensubtitles/wiki/HashSourceCodes
 
-        Example hash of "Willow (1988).avi": 00277ff46533b155
+        Example hash of "Underworld (2003).avi": 00277ff46533b155
         """
         url = config['urls']['hash.getInfo'] % (hash)
         etree = XmlHandler(url).getEt()
@@ -425,7 +425,7 @@ def hashGetInfo(hash):
 
     >>> import tmdb
     >>> tmdb.hashGetInfo('00277ff46533b155')
-    <MovieResult: Willow (1988-05-20)>
+    <MovieResult: Underworld (2003-09-19)>
     """
     mdb = MovieDb()
     return mdb.hashGetInfo(hash)
