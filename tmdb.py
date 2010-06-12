@@ -117,6 +117,13 @@ class MovieResult(dict):
     def __repr__(self):
         return "<MovieResult: %s (%s)>" % (self.get("name"), self.get("released"))
 
+    def info(self):
+        """Performs a MovieDb.getMovieInfo search on the current id, returns
+        a Movie object
+        """
+        cur_id = self['id']
+        info = MovieDb().getMovieInfo(cur_id)
+        return info
 
 class Movie(dict):
     """A dict containing the information about the film
