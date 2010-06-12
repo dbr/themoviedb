@@ -118,8 +118,9 @@ def test_artwork_generator():
         assert len(film['images'].posters) > 1
         assert len(film['images'].backdrops) > 1
         print film['images'].posters[0]['cover']
-        url = film['images'].posters[0]['cover'],
-        assert url == 'http://images.themoviedb.org/posters/4861/Fight_Club.jpg'
+        url = film['images'].posters[0]['cover']
+        assert url.startswith('http://hwcdn.themoviedb.org/posters/')
+        assert url.endswith('/fight-club-cover.jpg')
 
     yield test_posters
 
