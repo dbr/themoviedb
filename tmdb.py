@@ -3,7 +3,8 @@
 #author:dbr/Ben
 #contributors: by ccjensen/Chris
 #project:themoviedb
-#http://github.com/dbr/themoviedb
+#repository:http://github.com/dbr/tvdb_api
+#license: LGPLv2 http://www.gnu.org/licenses/lgpl.html
 
 """An interface to the themoviedb.org API
 """
