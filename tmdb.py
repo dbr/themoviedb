@@ -18,7 +18,8 @@ config['apikey'] = "a8b9f96dde091408a03cb4c78477bd14"
 config['urls'] = {}
 config['urls']['movie.search'] = "http://api.themoviedb.org/2.1/Movie.search/en/xml/%(apikey)s/%%s" % (config)
 config['urls']['movie.getInfo'] = "http://api.themoviedb.org/2.1/Movie.getInfo/en/xml/%(apikey)s/%%s" % (config)
-config['urls']['hash.getInfo'] = "http://api.themoviedb.org/2.1/Hash.getInfo/en/xml/%(apikey)s/%%s" % (config)
+config['urls']['media.getInfo'] = "http://api.themoviedb.org/2.1/Media.getInfo/en/xml/%(apikey)s/%%s/%%s" % (config)
+
 
 import os
 import struct
@@ -385,20 +386,17 @@ class MovieDb:
 
         return self._parseMovie(moviesTree[0])
 
-    def hashGetInfo(self, hash):
-        """Returns movie info by it's OpenSubtitle-format hash.
-        http://trac.opensubtitles.org/projects/opensubtitles/wiki/HashSourceCodes
-
-        Example hash of "Underworld (2003).avi": 00277ff46533b155
+    def mediaGetInfo(self, hash, size):
+        """Used to retrieve specific information about a movie but instead of
+        passing a TMDb ID, you pass a file hash and filesize in bytes
         """
-        url = config['urls']['hash.getInfo'] % (hash)
+        url = config['urls']['media.getInfo'] % (hash, size)
         etree = XmlHandler(url).getEt()
         moviesTree = etree.find("movies").findall("movie")
-
         if len(moviesTree) == 0:
             raise TmdNoResults("No results for hash %s" % hash)
 
-        return self._parseMovie(moviesTree[0])
+        return [self._parseMovie(x) for x in moviesTree]
 
 
 def search(name):
@@ -423,21 +421,21 @@ def getMovieInfo(id):
     return mdb.getMovieInfo(id)
 
 
-def hashGetInfo(hash):
-    """Convenience wrapper for MovieDb.hashGetInfo - so you can do..
+def mediaGetInfo(hash, size):
+    """Convenience wrapper for MovieDb.mediaGetInfo - so you can do..
 
     >>> import tmdb
-    >>> tmdb.hashGetInfo('00277ff46533b155')
-    <MovieResult: Underworld (2003-09-19)>
+    >>> tmdb.mediaGetInfo('907172e7fe51ba57', size = 742086656)[0]
+    <MovieResult: Sin City (2005-04-01)>
     """
     mdb = MovieDb()
-    return mdb.hashGetInfo(hash)
+    return mdb.mediaGetInfo(hash, size)
 
 
 def searchByHashingFile(filename):
     """Searches for the specified file using the OpenSubtitle hashing method
     """
-    return hashGetInfo(opensubtitleHashFile(filename))
+    return mediaGetInfo(opensubtitleHashFile(filename), os.path.size(filename))
 
 
 def main():

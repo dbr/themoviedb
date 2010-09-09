@@ -127,12 +127,14 @@ def test_artwork_generator():
     yield test_posters
 
 
-def test_gethashinfo():
+def test_mediagetinfo():
     """Tests searching by file hash
     """
     t = tmdb.MovieDb()
-    film = t.hashGetInfo('00277ff46533b155')
-    assert film['name'] == 'Underworld'
+    films = t.mediaGetInfo(hash = '907172e7fe51ba57', size = 742086656)
+    film = films[0]
+    print film['name']
+    assert film['name'] == 'Sin City'
 
 
 if __name__ == '__main__':
