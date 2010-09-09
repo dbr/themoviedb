@@ -92,6 +92,8 @@ class XmlHandler:
             urlhandle = urllib.urlopen(url)
         except IOError, errormsg:
             raise TmdHttpError(errormsg)
+        if urlhandle.code >= 400:
+            raise TmdHttpError("HTTP status code was %d" % urlhandle.code)
         return urlhandle.read()
 
     def getEt(self):
