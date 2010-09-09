@@ -24,6 +24,7 @@ config['urls']['media.getInfo'] = "http://api.themoviedb.org/2.1/Media.getInfo/e
 import os
 import struct
 import urllib
+import urllib2
 
 import xml.etree.cElementTree as ElementTree
 
@@ -90,7 +91,7 @@ class XmlHandler:
 
     def _grabUrl(self, url):
         try:
-            urlhandle = urllib.urlopen(url)
+            urlhandle = urllib2.urlopen(url)
         except IOError, errormsg:
             raise TmdHttpError(errormsg)
         if urlhandle.code >= 400:
