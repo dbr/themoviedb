@@ -142,4 +142,5 @@ def test_mediagetinfo():
 
 
 if __name__ == '__main__':
-    unittest.main()
+    import nose
+    nose.main()
