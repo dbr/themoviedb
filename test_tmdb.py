@@ -130,6 +130,10 @@ def test_artwork_generator():
 def test_mediagetinfo():
     """Tests searching by file hash
     """
+
+    import nose
+    raise nose.SkipTest("Finding reliable hash to test with is difficult..")
+
     t = tmdb.MovieDb()
     films = t.mediaGetInfo(hash = '907172e7fe51ba57', size = 742086656)
     film = films[0]
