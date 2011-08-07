@@ -440,6 +440,14 @@ def searchByHashingFile(filename):
 
 
 def main():
+    import sys
+    if len(sys.argv) > 1:
+        for arg in sys.argv[1:]:
+            try:
+                print searchByHashingFile(arg)
+            except TmdNoResults:
+                print "Nothing found for %s" % arg
+        return
     results = search("Fight Club")
     searchResult = results[0]
     movie = getMovieInfo(searchResult['id'])
