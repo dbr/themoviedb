@@ -1,9 +1,4 @@
-#!/usr/bin/env python2.5
-#encoding:utf-8
-#author:dbr/Ben
-#project:themoviedb
-#repository:http://github.com/dbr/tvdb_api
-#license: LGPLv2 http://www.gnu.org/licenses/lgpl.html
+#!/usr/bin/env python2
 
 import tmdb
 
