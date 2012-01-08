@@ -136,6 +136,11 @@ def test_mediagetinfo():
     assert film['name'] == 'Sin City'
 
 
+def test_doctest():
+    import doctest
+    doctest.testmod(tmdb, raise_on_error = True)
+
+
 if __name__ == '__main__':
     import nose
     nose.main()

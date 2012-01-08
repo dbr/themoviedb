@@ -1,10 +1,45 @@
 #!/usr/bin/env python2
 
 """An interface to the themoviedb.org API
+
+The quickest way to search for a series and get some basic info is to
+use the search method
+
+>>> import tmdb
+>>> results = tmdb.search("Fight Club")
+>>> results
+<Search results: [<MovieResult: Fight Club (1999-10-15)>]>
+>>> first = results[0]
+>>> first
+<MovieResult: Fight Club (1999-10-15)>
+>>> first['name']
+'Fight Club'
+>>> first['certification']
+'R'
+
+A ``MovieResult`` is a dictionary-like object which stores some basic
+information on each result (check ``first.keys()`` for all available
+items)
+
+The MovieResult only contains a small amount of data - if want all
+available information, you can call the info method and get a
+MovieInfo object:
+
+>>> full = first.info()
+>>> full
+<MovieResult: Fight Club (1999-10-15)>
+>>> full['tagline']
+"How much can you know about yourself if you've never been in a fight?"
+>>> full['cast']['director'][0]
+<director (id 7467): David Fincher>
+>>> full['cast']['director'][0]['name']
+'David Fincher'
 """
 
-__author__ = "dbr/Ben"
 __version__ = "0.2b"
+
+__author__ = "dbr/Ben"
+__credits__ = ["ccjensen"]
 
 config = {}
 config['apikey'] = "a8b9f96dde091408a03cb4c78477bd14"
@@ -29,6 +64,7 @@ class TmdBaseError(Exception):
 
 class TmdNoResults(TmdBaseError):
     pass
+
 
 class TmdHttpError(TmdBaseError):
     pass
@@ -261,8 +297,8 @@ class CrewRoleList(dict):
     """Stores a list of roles, such as director, actor etc
 
     >>> import tmdb
-    >>> tmdb.getMovieInfo(550)['cast'].keys()[:5]
-    ['casting', 'producer', 'author', 'sound editor', 'actor']
+    >>> sorted(tmdb.getMovieInfo(550)['cast'].keys()[:5])
+    ['author', 'casting', 'novel', 'producer', 'sound editor']
     """
     pass
 
@@ -272,7 +308,7 @@ class CrewList(list):
 
     >>> import tmdb
     >>> tmdb.getMovieInfo(550)['cast']['author']
-    [<author (id 7468): Chuck Palahniuk>, <author (id 7469): Jim Uhls>]
+    [<author (id 7469): Jim Uhls>]
     """
     pass
 
@@ -399,7 +435,7 @@ def search(name):
 
     >>> import tmdb
     >>> tmdb.search("Fight Club")
-    <Search results: [<MovieResult: Fight Club (1999-09-16)>]>
+    <Search results: [<MovieResult: Fight Club (1999-10-15)>]>
     """
     mdb = MovieDb()
     return mdb.search(name)
@@ -420,8 +456,11 @@ def mediaGetInfo(hash, size):
     """Convenience wrapper for MovieDb.mediaGetInfo - so you can do..
 
     >>> import tmdb
-    >>> tmdb.mediaGetInfo('907172e7fe51ba57', size = 742086656)[0]
+    >>> tmdb.mediaGetInfo('907172e7fe51ba57', size = 742086656)[0]  #doctest: +SKIP
     <MovieResult: Sin City (2005-04-01)>
+
+    Note that I have not found this API method reliable (even finding
+    a reliable test-case has proved difficult)
     """
     mdb = MovieDb()
     return mdb.mediaGetInfo(hash, size)
