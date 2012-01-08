@@ -28,7 +28,7 @@ def test_search_results():
 
     assert first_result['name'] == 'Fight Club'
 
-    assert first_result['released'] == '1999-09-16'
+    assert first_result['released'] == '1999-10-15'
 
     assert first_result['imdb_id'] == 'tt0137523'
 
@@ -122,7 +122,7 @@ def test_artwork_generator():
         print film['images'].posters[0]['cover']
         url = film['images'].posters[0]['cover']
         assert url.startswith('http://')
-        assert url.endswith('/fight-club-cover.jpg')
+        assert url.endswith('.jpg')
 
     yield test_posters
 
