@@ -47,6 +47,7 @@ config['apikey'] = "a8b9f96dde091408a03cb4c78477bd14"
 config['urls'] = {}
 config['urls']['movie.search'] = "http://api.themoviedb.org/2.1/Movie.search/en/xml/%(apikey)s/%%s" % (config)
 config['urls']['movie.getInfo'] = "http://api.themoviedb.org/2.1/Movie.getInfo/en/xml/%(apikey)s/%%s" % (config)
+config['urls']['movie.imdbLookup'] = "http://api.themoviedb.org/2.1/Movie.imdbLookup/en/xml/%(apikey)s/%%s" % (config)
 config['urls']['media.getInfo'] = "http://api.themoviedb.org/2.1/Media.getInfo/en/xml/%(apikey)s/%%s/%%s" % (config)
 
 
@@ -405,9 +406,14 @@ class MovieDb:
         return search_results
 
     def getMovieInfo(self, id):
-        """Returns movie info by it's TheMovieDb ID.
+        """Returns movie info by its TheMovieDb or IMDb ID.
+        An IMDb ID has to start with 'tt'.
         Returns a Movie instance
         """
+        if str(id).startswith('tt'):
+            imdb_url = config['urls']['movie.imdbLookup'] % (id)
+            etree = XmlHandler(imdb_url).getEt()
+            id = etree.find("movies/movie/id").text
         url = config['urls']['movie.getInfo'] % (id)
         etree = XmlHandler(url).getEt()
         moviesTree = etree.find("movies").findall("movie")

@@ -1,4 +1,5 @@
 #!/usr/bin/env python2
+# coding=utf-8
 
 import tmdb
 
@@ -54,6 +55,15 @@ def test_get_director():
 
     assert len(movie['cast']['director']) == 1
     assert movie['cast']['director'][0]['name'] == "Quentin Tarantino"
+
+def test_get_movie_from_imdb():
+    """Checks that a movie can be retrieved via its IMDb ID
+    """
+    movie = tmdb.getMovieInfo('tt0079023')
+    
+    assert len(movie['cast']['director']) == 2
+    assert movie['cast']['director'][0]['name'] == "Jean-Marie Straub"
+    assert movie['cast']['director'][1]['name'] == u"Danièlle Huillet"
 
 
 def test_search_wrapper():
