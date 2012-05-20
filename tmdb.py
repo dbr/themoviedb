@@ -93,11 +93,11 @@ def opensubtitleHashFile(name):
     fhash = filesize
 
     if filesize < 65536 * 2:
-       raise ValueError("File size must be larger than %s bytes (is %s)" % (65536*2, filesize))
+        raise ValueError("File size must be larger than %s bytes (is %s)" % (65536*2, filesize))
 
     for x in range(65536/bytesize):
         buf = f.read(bytesize)
-        (l_value,)= struct.unpack(longlongformat, buf)
+        (l_value,) = struct.unpack(longlongformat, buf)
         fhash += l_value
         fhash = fhash & 0xFFFFFFFFFFFFFFFF # to remain as 64bit number
 
@@ -324,7 +324,7 @@ class Person(dict):
         self['name'] = name
         self['character'] = character
         self['url'] = url
-	self['thumb'] = thumb
+        self['thumb'] = thumb
 
     def __repr__(self):
         if self['character'] is None or self['character'] == "":
