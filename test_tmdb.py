@@ -145,6 +145,14 @@ def test_mediagetinfo():
     assert film['name'] == 'Sin City'
 
 
+def test_castthumbnails():
+    """Tests actors have thumbnails
+    """
+    t = tmdb.MovieDb()
+    film = t.getMovieInfo(950)
+    assert film['cast']['actor'][0].has_key('thumb')
+    assert film['cast']['actor'][0]['thumb'].startswith('http://')
+
 def test_doctest():
     import doctest
     doctest.testmod(tmdb, raise_on_error = True)
