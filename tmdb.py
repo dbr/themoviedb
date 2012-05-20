@@ -318,12 +318,13 @@ class Person(dict):
     """Stores information about a specific member of cast
     """
 
-    def __init__(self, job, _id, name, character, url):
+    def __init__(self, job, _id, name, character, url, thumb):
         self['job'] = job
         self['id'] = _id
         self['name'] = name
         self['character'] = character
         self['url'] = url
+	self['thumb'] = thumb
 
     def __repr__(self):
         if self['character'] is None or self['character'] == "":
@@ -374,12 +375,16 @@ class MovieDb:
             elif item.tag.lower() == "cast":
                 for subitem in item.getchildren():
                     job = subitem.get("job").lower()
+                    thumb = ""
+                    if "thumb" in subitem.keys():
+                        thumb = subitem.get("thumb")
                     p = Person(
                         job = job,
                         _id = subitem.get("id"),
                         name = subitem.get("name"),
                         character = subitem.get("character"),
                         url = subitem.get("url"),
+                        thumb = thumb
                     )
                     cur_cast.setdefault(job, CrewList()).append(p)
             else:
