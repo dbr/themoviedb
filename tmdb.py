@@ -7,19 +7,23 @@ use the search method
 
 >>> import tmdb
 >>> results = tmdb.search("Fight Club")
->>> results
-<Search results: [<MovieResult: Fight Club (1999-10-15)>]>
+
+
+The search method returns a list-like object (a `SearchResults`
+object). To get the first result is easy:
+
 >>> first = results[0]
 >>> first
 <MovieResult: Fight Club (1999-10-15)>
->>> first['name']
-'Fight Club'
->>> first['certification']
-'R'
 
 A ``MovieResult`` is a dictionary-like object which stores some basic
 information on each result (check ``first.keys()`` for all available
 items)
+
+>>> first['name']
+'Fight Club'
+>>> first['certification']
+'R'
 
 The MovieResult only contains a small amount of data - if want all
 available information, you can call the info method and get a
@@ -445,8 +449,8 @@ def search(name):
     """Convenience wrapper for MovieDb.search - so you can do..
 
     >>> import tmdb
-    >>> tmdb.search("Fight Club")
-    <Search results: [<MovieResult: Fight Club (1999-10-15)>]>
+    >>> tmdb.search("Inglourious Basterds")
+    <Search results: [<MovieResult: Inglourious Basterds (2009-08-21)>]>
     """
     mdb = MovieDb()
     return mdb.search(name)
