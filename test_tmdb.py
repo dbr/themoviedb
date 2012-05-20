@@ -62,7 +62,8 @@ def test_get_movie_from_imdb():
 
     assert len(movie['cast']['director']) == 2
     assert movie['cast']['director'][0]['name'] == "Jean-Marie Straub"
-    assert movie['cast']['director'][1]['name'] == u"Dani\xe8lle Huillet"
+    print repr(movie['cast']['director'][1]['name'])
+    assert movie['cast']['director'][1]['name'] == u"Dani\xe8le Huillet"
 
 
 def test_search_wrapper():
