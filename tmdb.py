@@ -14,7 +14,7 @@ object). To get the first result is easy:
 
 >>> first = results[0]
 >>> first
-<MovieResult: Fight Club (1999-10-15)>
+<MovieResult: 'Fight Club' (1999-10-15)>
 
 A ``MovieResult`` is a dictionary-like object which stores some basic
 information on each result (check ``first.keys()`` for all available
@@ -31,7 +31,7 @@ MovieInfo object:
 
 >>> full = first.info()
 >>> full
-<MovieResult: Fight Club (1999-10-15)>
+<MovieResult: 'Fight Club' (1999-10-15)>
 >>> full['tagline']
 "How much can you know about yourself if you've never been in a fight?"
 >>> full['cast']['director'][0]
@@ -450,7 +450,7 @@ def search(name):
 
     >>> import tmdb
     >>> tmdb.search("Inglourious Basterds")
-    <Search results: [<MovieResult: Inglourious Basterds (2009-08-21)>]>
+    <Search results: [<MovieResult: 'Inglourious Basterds' (2009-08-21)>]>
     """
     mdb = MovieDb()
     return mdb.search(name)
@@ -461,7 +461,7 @@ def getMovieInfo(id):
 
     >>> import tmdb
     >>> tmdb.getMovieInfo(187)
-    <MovieResult: Sin City (2005-04-01)>
+    <MovieResult: 'Sin City' (2005-04-01)>
     """
     mdb = MovieDb()
     return mdb.getMovieInfo(id)
@@ -472,7 +472,7 @@ def mediaGetInfo(hash, size):
 
     >>> import tmdb
     >>> tmdb.mediaGetInfo('907172e7fe51ba57', size = 742086656)[0]  #doctest: +SKIP
-    <MovieResult: Sin City (2005-04-01)>
+    <MovieResult: 'Sin City' (2005-04-01)>
 
     Note that I have not found this API method reliable (even finding
     a reliable test-case has proved difficult)
