@@ -155,7 +155,7 @@ class MovieResult(dict):
     """
 
     def __repr__(self):
-        return "<MovieResult: %s (%s)>" % (self.get("name"), self.get("released"))
+        return "<MovieResult: %r (%s)>" % (self.get("name"), self.get("released"))
 
     def info(self):
         """Performs a MovieDb.getMovieInfo search on the current id, returns
@@ -170,7 +170,7 @@ class Movie(dict):
     """
 
     def __repr__(self):
-        return "<MovieResult: %s (%s)>" % (self.get("name"), self.get("released"))
+        return "<MovieResult: %r (%s)>" % (self.get("name"), self.get("released"))
 
 
 class Categories(dict):
