@@ -312,8 +312,10 @@ class CrewRoleList(dict):
     """Stores a list of roles, such as director, actor etc
 
     >>> import tmdb
-    >>> sorted(tmdb.getMovieInfo(550)['cast'].keys()[:5])
-    ['author', 'casting', 'novel', 'producer', 'sound editor']
+    >>> m = tmdb.getMovieInfo(550)['cast']
+    >>> print(m)
+    >>> m['director'][0]
+    [<director (id 7467): David Fincher>]
     """
     pass
 
