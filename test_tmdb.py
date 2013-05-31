@@ -23,7 +23,7 @@ def test_search_results():
 
     assert first_result['name'] == 'Fight Club'
 
-    assert first_result['released'] == '1999-10-15'
+    assert first_result['released'] == '1999-10-14'
 
     assert first_result['imdb_id'] == 'tt0137523'
 
