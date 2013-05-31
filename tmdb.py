@@ -40,10 +40,28 @@ MovieInfo object:
 'David Fincher'
 """
 
+from __future__ import print_function
+
 __version__ = "0.2b"
 
 __author__ = "dbr/Ben"
 __credits__ = ["ccjensen"]
+
+import sys
+PY2 = sys.version_info[0] == 2
+
+import os
+import struct
+import urllib
+import xml.etree.cElementTree as ElementTree
+if PY2:
+    from urllib2 import urlopen
+    from urllib import quote as urlquote
+    urlquote = urllib.quote
+else:
+    from urllib.request import urlopen
+    from urllib.parse import quote as urlquote
+
 
 config = {}
 config['apikey'] = "a8b9f96dde091408a03cb4c78477bd14"
@@ -53,14 +71,6 @@ config['urls']['movie.search'] = "http://api.themoviedb.org/2.1/Movie.search/en/
 config['urls']['movie.getInfo'] = "http://api.themoviedb.org/2.1/Movie.getInfo/en/xml/%(apikey)s/%%s" % (config)
 config['urls']['movie.imdbLookup'] = "http://api.themoviedb.org/2.1/Movie.imdbLookup/en/xml/%(apikey)s/%%s" % (config)
 config['urls']['media.getInfo'] = "http://api.themoviedb.org/2.1/Media.getInfo/en/xml/%(apikey)s/%%s/%%s" % (config)
-
-
-import os
-import struct
-import urllib
-import urllib2
-
-import xml.etree.cElementTree as ElementTree
 
 
 class TmdBaseError(Exception):
@@ -126,8 +136,8 @@ class XmlHandler:
 
     def _grabUrl(self, url):
         try:
-            urlhandle = urllib2.urlopen(url)
-        except IOError, errormsg:
+            urlhandle = urlopen(url)
+        except IOError as errormsg:
             raise TmdHttpError(errormsg)
         if urlhandle.code >= 400:
             raise TmdHttpError("HTTP status code was %d" % urlhandle.code)
@@ -137,7 +147,7 @@ class XmlHandler:
         xml = self._grabUrl(self.url)
         try:
             et = ElementTree.fromstring(xml)
-        except SyntaxError, errormsg:
+        except SyntaxError as errormsg:
             raise TmdXmlError(errormsg)
         return et
 
@@ -405,7 +415,7 @@ class MovieDb:
         """Searches for a film by its title.
         Returns SearchResults (a list) containing all matches (Movie instances)
         """
-        title = urllib.quote(title.encode("utf-8"))
+        title = urlquote(title.encode("utf-8"))
         url = config['urls']['movie.search'] % (title)
         etree = XmlHandler(url).getEt()
         search_results = SearchResults()
@@ -492,21 +502,21 @@ def main():
     if len(sys.argv) > 1:
         for arg in sys.argv[1:]:
             try:
-                print searchByHashingFile(arg)
+                print(searchByHashingFile(arg))
             except TmdNoResults:
-                print "Nothing found for %s" % arg
+                print("Nothing found for %s" % arg)
         return
     results = search("Fight Club")
     searchResult = results[0]
     movie = getMovieInfo(searchResult['id'])
-    print movie['name']
+    print(movie['name'])
 
-    print "Producers:"
+    print("Producers:")
     for prodr in movie['cast']['producer']:
-        print " " * 4, prodr['name']
-    print movie['images']
+        print(" " * 4, prodr['name'])
+    print(movie['images'])
     for genreName in movie['categories']['genre']:
-        print "%s (%s)" % (genreName, movie['categories']['genre'][genreName])
+        print("%s (%s)" % (genreName, movie['categories']['genre'][genreName]))
 
 
 if __name__ == '__main__':

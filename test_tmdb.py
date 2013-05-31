@@ -1,5 +1,8 @@
 #!/usr/bin/env python2
 
+from __future__ import print_function
+from __future__ import unicode_literals
+
 import tmdb
 
 
@@ -21,10 +24,13 @@ def test_search_results():
 
     assert isinstance(first_result, tmdb.MovieResult)
 
+    print(first_result['name'])
     assert first_result['name'] == 'Fight Club'
 
+    print(first_result['released'])
     assert first_result['released'] == '1999-10-14'
 
+    print(first_result['imdb_id'])
     assert first_result['imdb_id'] == 'tt0137523'
 
 
@@ -62,7 +68,7 @@ def test_get_movie_from_imdb():
 
     assert len(movie['cast']['director']) == 2
     assert movie['cast']['director'][0]['name'] == "Jean-Marie Straub"
-    print repr(movie['cast']['director'][1]['name'])
+    print(repr(movie['cast']['director'][1]['name']))
     assert movie['cast']['director'][1]['name'] == u"Dani\xe8le Huillet"
 
 
@@ -124,7 +130,7 @@ def test_artwork_generator():
         """
         assert len(film['images'].posters) > 1
         assert len(film['images'].backdrops) > 1
-        print film['images'].posters[0]['cover']
+        print(film['images'].posters[0]['cover'])
         url = film['images'].posters[0]['cover']
         assert url.startswith('http://')
         assert url.endswith('.jpg')
@@ -142,7 +148,7 @@ def test_mediagetinfo():
     t = tmdb.MovieDb()
     films = t.mediaGetInfo(hash = '907172e7fe51ba57', size = 742086656)
     film = films[0]
-    print film['name']
+    print(film['name'])
     assert film['name'] == 'Sin City'
 
 
@@ -151,7 +157,7 @@ def test_castthumbnails():
     """
     t = tmdb.MovieDb()
     film = t.getMovieInfo(950)
-    assert film['cast']['actor'][0].has_key('thumb')
+    assert 'thumb' in film['cast']['actor'][0]
     assert film['cast']['actor'][0]['thumb'].startswith('http://')
 
 def test_doctest():
