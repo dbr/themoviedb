@@ -42,7 +42,7 @@ MovieInfo object:
 
 from __future__ import print_function
 
-__version__ = "0.2b"
+__version__ = "1.0b"
 
 __author__ = "dbr/Ben"
 __credits__ = ["ccjensen"]
